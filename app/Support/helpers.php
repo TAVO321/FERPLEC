@@ -4,8 +4,10 @@ use Illuminate\Support\Facades\Storage;
 
 if (! function_exists('media_url')) {
     /**
-     * Build a public URL for a stored media path, using the configured disk.
-     * Falls back to the local /storage asset for paths that don't exist on the disk.
+     * Build a public URL for a stored media path.
+     *
+     * Uses the `public` disk, which transparently switches between the local
+     * filesystem and an S3/R2 bucket depending on whether AWS_BUCKET is set.
      */
     function media_url(?string $path): ?string
     {
@@ -17,14 +19,6 @@ if (! function_exists('media_url')) {
             return $path;
         }
 
-        $path = ltrim($path, '/');
-
-        $disk = config('filesystems.disks.'.config('filesystems.default'));
-
-        if (($disk['driver'] ?? 'local') === 'local') {
-            return asset('storage/'.$path);
-        }
-
-        return Storage::disk(config('filesystems.default'))->url($path);
+        return Storage::disk('public')->url(ltrim($path, '/'));
     }
 }
