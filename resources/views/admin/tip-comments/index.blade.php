@@ -133,7 +133,7 @@
         </tbody>
     </table>
     @if($comments->hasPages())
-        <div class="border-t border-slate-100 px-6 py-4">
+        <div class="hidden border-t border-slate-100 px-6 py-4 lg:block">
             {{ $comments->links() }}
         </div>
     @endif

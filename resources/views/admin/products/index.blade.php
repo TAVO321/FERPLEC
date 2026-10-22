@@ -197,5 +197,5 @@
     </table>
 </div>
 
-<div class="mt-4">{{ $products->links() }}</div>
+<div class="mt-4 hidden lg:block">{{ $products->links() }}</div>
 @endsection
