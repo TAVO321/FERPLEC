@@ -13,7 +13,7 @@
 <section class="max-w-7xl mx-auto px-4 mt-8 space-y-6">
     @forelse($banners as $banner)
     <a href="{{ $banner->button_link ?? '#' }}" class="block rounded-2xl overflow-hidden shadow-sm">
-        <img src="{{ asset('storage/'.$banner->image) }}" alt="{{ $banner->title }}" class="w-full h-auto">
+        <img src="{{ media_url($banner->image) }}" alt="{{ $banner->title }}" class="w-full h-auto">
     </a>
     @empty
     <div class="text-center py-12 text-gray-500">No hay promociones vigentes por el momento.</div>

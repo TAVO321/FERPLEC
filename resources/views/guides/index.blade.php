@@ -6,8 +6,8 @@
 @section('content')
 <section class="relative overflow-hidden bg-[#173451] text-white">
     <picture>
-        <source srcset="{{ asset('storage/banners/tips-hero.webp') }}" type="image/webp">
-        <img src="{{ asset('storage/banners/tips-hero.jpg') }}" alt="Tips FERPLEC - Aprende, construye y soluciona" class="absolute inset-0 w-full h-full object-cover object-[70%_center]">
+        <source srcset="{{ media_url('banners/tips-hero.webp') }}" type="image/webp">
+        <img src="{{ media_url('banners/tips-hero.jpg') }}" alt="Tips FERPLEC - Aprende, construye y soluciona" class="absolute inset-0 w-full h-full object-cover object-[70%_center]">
     </picture>
     <div class="absolute inset-0 bg-gradient-to-r from-[#173451] via-[#173451]/95 to-[#173451]/55"></div>
     <div class="relative max-w-7xl mx-auto px-4 py-10 md:py-16">
@@ -88,7 +88,7 @@
         <article class="group flex flex-col rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden hover:shadow-xl hover:-translate-y-0.5 transition-all">
             <a href="{{ route('tips.show', $tip) }}" class="relative aspect-[16/9] bg-gradient-to-br from-[#173451] via-[#1d4266] to-[#24507a] flex items-center justify-center text-white/25 overflow-hidden">
                 @if($tip->image)
-                    <img src="{{ asset('storage/'.$tip->image) }}" alt="{{ $tip->title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <img src="{{ media_url($tip->image) }}" alt="{{ $tip->title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                 @else
                     <x-tip-icon :category="$tip->category" class="w-12 h-12" />
                 @endif

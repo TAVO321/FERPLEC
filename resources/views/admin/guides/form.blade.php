@@ -37,7 +37,7 @@
         <div class="mt-2 flex flex-col gap-4 sm:flex-row sm:items-center">
             <div class="flex h-28 w-full max-w-xs shrink-0 items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50">
                 @if ($guide?->image)
-                    <img src="{{ Str::startsWith($guide->image, ['http://','https://','/']) ? $guide->image : asset('storage/'.$guide->image) }}" alt="" class="h-full w-full object-cover">
+                    <img src="{{ media_url($guide->image) }}" alt="" class="h-full w-full object-cover">
                 @else
                     <span class="text-2xl text-slate-300">🖼️</span>
                 @endif

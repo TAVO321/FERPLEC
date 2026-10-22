@@ -38,7 +38,7 @@
         <div class="-mt-8 md:-mt-12 relative z-10">
             @if($tip->image)
                 <div class="rounded-2xl overflow-hidden aspect-[16/9] shadow-xl ring-1 ring-gray-100 bg-white">
-                    <img src="{{ asset('storage/'.$tip->image) }}" alt="{{ $tip->title }}" class="w-full h-full object-cover">
+                    <img src="{{ media_url($tip->image) }}" alt="{{ $tip->title }}" class="w-full h-full object-cover">
                 </div>
             @else
                 <div class="rounded-2xl aspect-[16/9] shadow-xl ring-1 ring-gray-100 bg-gradient-to-br from-[#173451] via-[#1d4266] to-[#24507a] flex items-center justify-center text-white/20">
@@ -89,7 +89,7 @@
             <a href="{{ route('tips.show', $related) }}" class="group flex flex-col rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all">
                 <div class="relative aspect-[16/9] bg-gradient-to-br from-[#173451] via-[#1d4266] to-[#24507a] flex items-center justify-center text-white/25 overflow-hidden">
                     @if($related->image)
-                        <img src="{{ asset('storage/'.$related->image) }}" alt="{{ $related->title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <img src="{{ media_url($related->image) }}" alt="{{ $related->title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     @else
                         <x-tip-icon :category="$related->category" class="w-10 h-10" />
                     @endif
@@ -114,7 +114,7 @@
             <div class="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden flex flex-col">
                 <a href="{{ route('product.show', $product) }}" class="aspect-[4/3] bg-[#F4F6F8] block">
                     @if($product->main_image)
-                        <img src="{{ asset('storage/'.$product->main_image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
+                        <img src="{{ media_url($product->main_image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
                     @else
                         <div class="w-full h-full flex items-center justify-center text-gray-300">
                             <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>

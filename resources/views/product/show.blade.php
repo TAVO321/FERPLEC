@@ -11,7 +11,7 @@
         <div class="space-y-4">
             <div class="aspect-square rounded-2xl overflow-hidden bg-[#F4F6F8]">
                 @if($product->main_image)
-                    <img src="{{ asset('storage/'.$product->main_image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
+                    <img src="{{ media_url($product->main_image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
                 @else
                     <div class="w-full h-full flex items-center justify-center text-gray-400">
                         <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
@@ -61,7 +61,7 @@
         <div class="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden">
             <a href="{{ route('product.show', $item) }}" class="aspect-[4/3] bg-[#F4F6F8] block">
                 @if($item->main_image)
-                    <img src="{{ asset('storage/'.$item->main_image) }}" alt="{{ $item->name }}" class="w-full h-full object-cover">
+                    <img src="{{ media_url($item->main_image) }}" alt="{{ $item->name }}" class="w-full h-full object-cover">
                 @endif
             </a>
             <div class="p-4 space-y-2">

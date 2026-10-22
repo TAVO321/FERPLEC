@@ -31,7 +31,7 @@
     <div class="mt-2 flex items-center gap-4">
         <div class="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 text-2xl text-slate-300">
             @if ($product?->main_image)
-                <img src="{{ asset('storage/'.ltrim($product->main_image, '/')) }}" alt="" class="h-full w-full object-cover">
+                <img src="{{ media_url($product->main_image) }}" alt="" class="h-full w-full object-cover">
             @else
                 🖼️
             @endif

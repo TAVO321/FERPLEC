@@ -41,7 +41,7 @@
             <div class="flex items-start gap-3">
                 <div class="shrink-0">
                     @if ($product->main_image)
-                        <img src="{{ asset('storage/'.ltrim($product->main_image, '/')) }}" alt="" class="h-12 w-12 rounded-lg object-cover">
+                        <img src="{{ media_url($product->main_image) }}" alt="" class="h-12 w-12 rounded-lg object-cover">
                     @elseif ($product->category)
                         <span class="flex h-12 w-12 items-center justify-center rounded-lg text-lg" style="background: {{ $product->category->color }}15">{{ $product->category->icon }}</span>
                     @else
@@ -130,7 +130,7 @@
                 <tr class="hover:bg-slate-50/60" x-data="{ edit: false }">
                     <td class="px-3 py-3">
                         @if ($product->main_image)
-                            <img src="{{ asset('storage/'.ltrim($product->main_image, '/')) }}" alt="" class="h-10 w-10 rounded-lg object-cover">
+                            <img src="{{ media_url($product->main_image) }}" alt="" class="h-10 w-10 rounded-lg object-cover">
                         @elseif ($product->category)
                             <span class="flex h-10 w-10 items-center justify-center rounded-lg text-lg" style="background: {{ $product->category->color }}15">{{ $product->category->icon }}</span>
                         @else

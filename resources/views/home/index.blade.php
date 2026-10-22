@@ -30,7 +30,7 @@
     <div class="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-3">
         @foreach($mainCategories as $category)
         <a href="{{ route('catalog', ['category' => $category->id]) }}" class="group relative overflow-hidden rounded-xl shadow-lg h-28 sm:h-32">
-            <img src="{{ $category->image ? (str_starts_with($category->image, 'http') ? $category->image : asset('storage/'.$category->image)) : 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1600&auto=format&fit=crop' }}" alt="{{ $category->name }}" class="absolute inset-0 w-full h-full object-cover object-[70%_center] group-hover:scale-105 transition duration-500">
+            <img src="{{ $category->image ? (str_starts_with($category->image, 'http') ? $category->image : media_url($category->image)) : 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1600&auto=format&fit=crop' }}" alt="{{ $category->name }}" class="absolute inset-0 w-full h-full object-cover object-[70%_center] group-hover:scale-105 transition duration-500">
             <div class="absolute inset-0 bg-gradient-to-r from-[#173451]/95 via-[#173451]/65 to-transparent"></div>
             <div class="absolute inset-y-0 left-0 flex items-center p-4 sm:p-5">
                 <div>
@@ -73,7 +73,7 @@
         <div class="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden flex flex-col">
             <a href="{{ route('product.show', $product) }}" class="aspect-[4/3] bg-[#F4F6F8] block overflow-hidden">
                 @if($product->main_image)
-                    <img src="{{ asset('storage/'.$product->main_image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                    <img src="{{ media_url($product->main_image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
                 @else
                     <div class="w-full h-full flex items-center justify-center text-gray-300">
                         <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
@@ -160,7 +160,7 @@
         <article class="snap-start shrink-0 w-[84%] sm:w-[52%] lg:w-[calc(33.333%-0.667rem)] rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden flex flex-col hover:shadow-md transition-shadow">
             <a href="{{ route('tips.show', $tip) }}" class="block aspect-[16/9] bg-gradient-to-br from-[#173451] to-[#24507a] overflow-hidden">
                 @if($tip->image)
-                    <img src="{{ asset('storage/'.$tip->image) }}" alt="{{ $tip->title }}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                    <img src="{{ media_url($tip->image) }}" alt="{{ $tip->title }}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
                 @else
                     <div class="w-full h-full flex items-center justify-center text-white/25">
                         <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>

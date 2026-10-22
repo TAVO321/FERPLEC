@@ -5,8 +5,8 @@
 @section('content')
 <section class="relative overflow-hidden bg-[#173451] text-white">
     <picture>
-        <source srcset="{{ asset('storage/banners/catalogo.webp') }}" type="image/webp">
-        <img src="{{ asset('storage/banners/catalogo.jpg') }}" alt="Catálogo de productos FERPLEC" class="absolute inset-0 w-full h-full object-cover object-[65%_center]">
+        <source srcset="{{ media_url('banners/catalogo.webp') }}" type="image/webp">
+        <img src="{{ media_url('banners/catalogo.jpg') }}" alt="Catálogo de productos FERPLEC" class="absolute inset-0 w-full h-full object-cover object-[65%_center]">
     </picture>
     <div class="absolute inset-0 bg-gradient-to-r from-[#173451] via-[#173451]/92 to-[#173451]/35"></div>
     <div class="relative max-w-7xl mx-auto px-4 py-10 sm:py-12 lg:py-14">
@@ -70,7 +70,7 @@
         <article class="group rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden flex flex-col hover:shadow-lg hover:-translate-y-0.5 transition-all">
             <a href="{{ route('product.show', $product) }}" class="aspect-[4/3] bg-[#F4F6F8] block overflow-hidden">
                 @if($product->main_image)
-                    <img src="{{ asset('storage/'.$product->main_image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <img src="{{ media_url($product->main_image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                 @else
                     <div class="w-full h-full flex items-center justify-center text-gray-300">
                         <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
