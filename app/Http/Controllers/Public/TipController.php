@@ -6,44 +6,67 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Tip;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class TipController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        $categories = Tip::published()->orderBy('category')->distinct()->pluck('category');
-        $totalTips = Tip::published()->count();
+        $category = $request->string('categoria')->trim()->toString();
 
-        $query = Tip::published();
+        $query = Tip::published()->orderByDesc('published_at');
         $featured = null;
 
-        if ($request->filled('categoria')) {
-            $query->where('category', $request->categoria);
+        if ($category !== '') {
+            $query->where('category', $category);
         } else {
-            $featured = Tip::published()->where('is_featured', true)->orderByDesc('published_at')->first();
+            $featured = Tip::published()
+                ->where('is_featured', true)
+                ->orderByDesc('published_at')
+                ->first();
 
             if ($featured) {
-                $query->where('id', '!=', $featured->id);
+                $query->whereKeyNot($featured->getKey());
             }
         }
 
-        $tips = $query->orderByDesc('published_at')->paginate(12)->withQueryString();
+        $tips = $query->paginate(12)->withQueryString();
 
-        return view('guides.index', compact('tips', 'featured', 'categories', 'totalTips'));
+        $categories = Tip::published()
+            ->select('category')
+            ->distinct()
+            ->orderBy('category')
+            ->pluck('category');
+
+        return view('tips.index', [
+            'tips' => $tips,
+            'featured' => $featured,
+            'categories' => $categories,
+            'totalTips' => $tips->total(),
+        ]);
     }
 
-    public function show(Tip $tip)
+    public function show(Tip $tip): View
     {
-        if (! $tip->is_published) {
-            abort(404);
-        }
-        $relatedTips = Tip::published()->where('id', '!=', $tip->id)->where('category', $tip->category)->limit(4)->get();
-        $relatedProducts = collect();
-        if ($tip->related_products) {
-            $relatedProducts = Product::whereIn('id', $tip->related_products)->where('is_active', true)->get();
-        }
+        abort_unless($tip->is_published, 404);
+
+        $relatedTips = Tip::published()
+            ->whereKeyNot($tip->getKey())
+            ->where('category', $tip->category)
+            ->limit(4)
+            ->get();
+
+        $relatedProducts = $tip->related_products
+            ? Product::active()->whereKey($tip->related_products)->get()
+            : collect();
+
         $comments = $tip->approvedComments()->latest()->get();
 
-        return view('guides.show', compact('tip', 'relatedTips', 'relatedProducts', 'comments'));
+        return view('tips.show', [
+            'tip' => $tip,
+            'relatedTips' => $relatedTips,
+            'relatedProducts' => $relatedProducts,
+            'comments' => $comments,
+        ]);
     }
 }

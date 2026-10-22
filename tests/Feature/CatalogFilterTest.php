@@ -11,40 +11,71 @@ class CatalogFilterTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function seedCatalog(): void
-    {
-        $plomeria = Category::create(['name' => 'Plomería', 'slug' => 'plomeria', 'is_active' => true]);
-        $tuberias = Category::create(['name' => 'Tuberías PVC', 'slug' => 'tuberias-pvc', 'parent_id' => $plomeria->id, 'is_active' => true]);
-        $sanitarios = Category::create(['name' => 'Accesorios Sanitarios', 'slug' => 'accesorios-sanitarios', 'parent_id' => $plomeria->id, 'is_active' => true]);
+    private Category $parent;
 
-        Product::create(['code' => 'PL1', 'name' => 'Tubería PVC E-40', 'category_id' => $plomeria->id, 'subcategory_id' => $tuberias->id]);
-        Product::create(['code' => 'PL2', 'name' => 'Codo PVC sanitario', 'category_id' => $plomeria->id, 'subcategory_id' => $sanitarios->id]);
+    private Category $tuberias;
+
+    private Category $sanitarios;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->parent = Category::factory()->create(['name' => 'Plomería', 'slug' => 'plomeria']);
+        $this->tuberias = Category::factory()->childOf($this->parent)->create(['name' => 'Tuberías PVC', 'slug' => 'tuberias-pvc']);
+        $this->sanitarios = Category::factory()->childOf($this->parent)->create(['name' => 'Accesorios Sanitarios', 'slug' => 'accesorios-sanitarios']);
+
+        Product::factory()->inCategory($this->tuberias)->create(['code' => 'PL1', 'name' => 'Tubería PVC E-40']);
+        Product::factory()->inCategory($this->sanitarios)->create(['code' => 'PL2', 'name' => 'Codo PVC sanitario']);
     }
 
     public function test_parent_category_returns_all_its_products(): void
     {
-        $this->seedCatalog();
-
-        $response = $this->get('/productos?category='.$this->categoryId('plomeria'));
-
-        $response->assertOk();
-        $response->assertSee('Tubería PVC E-40');
-        $response->assertSee('Codo PVC sanitario');
+        $this->get('/productos?category='.$this->parent->id)
+            ->assertOk()
+            ->assertSee('Tubería PVC E-40')
+            ->assertSee('Codo PVC sanitario');
     }
 
     public function test_subcategory_filter_returns_only_that_subcategory(): void
     {
-        $this->seedCatalog();
-
-        $response = $this->get('/productos?category='.$this->categoryId('tuberias-pvc'));
-
-        $response->assertOk();
-        $response->assertSee('Tubería PVC E-40');
-        $response->assertDontSee('Codo PVC sanitario');
+        $this->get('/productos?category='.$this->tuberias->id)
+            ->assertOk()
+            ->assertSee('Tubería PVC E-40')
+            ->assertDontSee('Codo PVC sanitario');
     }
 
-    private function categoryId(string $slug): int
+    public function test_inactive_products_are_not_listed(): void
     {
-        return Category::where('slug', $slug)->firstOrFail()->id;
+        Product::factory()->inactive()->create(['name' => 'Producto Oculto']);
+
+        $this->get('/productos')
+            ->assertOk()
+            ->assertDontSee('Producto Oculto');
+    }
+
+    public function test_catalog_can_be_sorted_by_price(): void
+    {
+        Product::factory()->create(['name' => 'Producto Barato', 'price' => 10]);
+        Product::factory()->create(['name' => 'Producto Caro', 'price' => 900]);
+
+        $response = $this->get('/productos?sort=precio_asc')->assertOk();
+
+        $positions = [
+            strpos($response->getContent(), 'Producto Barato'),
+            strpos($response->getContent(), 'Producto Caro'),
+        ];
+
+        $this->assertNotFalse($positions[0]);
+        $this->assertNotFalse($positions[1]);
+        $this->assertLessThan($positions[1], $positions[0]);
+    }
+
+    public function test_catalog_search_matches_code(): void
+    {
+        $this->get('/productos?q=PL1')
+            ->assertOk()
+            ->assertSee('Tubería PVC E-40')
+            ->assertDontSee('Codo PVC sanitario');
     }
 }

@@ -12,17 +12,21 @@ class DashboardController extends Controller
 {
     public function __invoke(): View
     {
+        $productStats = Product::query()
+            ->selectRaw('COUNT(*) AS total, COALESCE(SUM(is_active), 0) AS active')
+            ->first();
+
         return view('admin.dashboard', [
-            'products' => Product::count(),
-            'activeProducts' => Product::where('is_active', true)->count(),
+            'products' => (int) $productStats->total,
+            'activeProducts' => (int) $productStats->active,
             'categories' => Category::count(),
             'guides' => Tip::count(),
-            'lowStock' => Product::where('is_active', true)
+            'lowStock' => Product::active()
                 ->where('stock', '<=', 5)
                 ->orderBy('stock')
                 ->take(10)
                 ->get(),
-            'recentProducts' => Product::latest()->take(5)->get(),
+            'recentProducts' => Product::with('category')->latest()->take(5)->get(),
         ]);
     }
 }

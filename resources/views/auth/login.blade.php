@@ -12,8 +12,12 @@
 <div class="grid min-h-screen lg:grid-cols-[1.05fr_1fr]">
     {{-- Panel de marca --}}
     <aside class="relative hidden overflow-y-auto bg-[#0f243a] lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:justify-between">
-        <img src="{{ asset('images/hero-ferplec.jpg') }}" alt="" aria-hidden="true"
-             class="pointer-events-none absolute inset-0 h-full w-full object-cover object-center opacity-30 saturate-50">
+        <picture>
+            <source type="image/avif" srcset="{{ asset('images/hero-640.avif') }} 640w, {{ asset('images/hero-1280.avif') }} 1280w" sizes="50vw">
+            <source type="image/webp" srcset="{{ asset('images/hero-640.webp') }} 640w, {{ asset('images/hero-1280.webp') }} 1280w" sizes="50vw">
+            <img src="{{ asset('images/hero-1280.jpg') }}" srcset="{{ asset('images/hero-640.jpg') }} 640w, {{ asset('images/hero-1280.jpg') }} 1280w" sizes="50vw" width="1280" height="700" loading="lazy" decoding="async" alt="" aria-hidden="true"
+                 class="pointer-events-none absolute inset-0 h-full w-full object-cover object-center opacity-30 saturate-50">
+        </picture>
         <div class="absolute inset-0 bg-gradient-to-br from-[#0b1f33] via-[#0f243a]/92 to-[#0b1f33]/95"></div>
         <div class="absolute inset-0 opacity-[0.07]" style="background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:44px 44px"></div>
         <div class="absolute -left-24 top-1/4 h-96 w-96 rounded-full bg-[#E66A19]/25 blur-[110px]"></div>

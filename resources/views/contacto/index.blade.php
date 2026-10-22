@@ -14,7 +14,7 @@
     <div class="rounded-2xl border border-gray-100 p-8 text-center space-y-4">
         <h2 class="text-2xl font-semibold text-[#173451]">¿Necesitas asesoría o cotización?</h2>
         <p class="text-gray-600">Sin registro. Te atendemos directamente.</p>
-        <a href="https://wa.me/{{ config('ferplec.whatsapp', env('WHATSAPP_NUMBER','59163951262')) }}" target="_blank" class="inline-flex items-center gap-2 rounded-lg bg-[#22A366] text-white px-8 py-3 font-semibold">Contactar por WhatsApp</a>
+        <a href="{{ wa_link() }}" target="_blank" class="inline-flex items-center gap-2 rounded-lg bg-[#22A366] text-white px-8 py-3 font-semibold">Contactar por WhatsApp</a>
     </div>
 </section>
 @endsection

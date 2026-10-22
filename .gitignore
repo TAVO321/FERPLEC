@@ -19,7 +19,11 @@
 /public/hot
 /public/storage
 /storage/*.key
-/storage/pail
+
+# Volcado de producción: contiene datos reales y hashes de contraseña.
+# No debe subirse al repositorio.
+/database/ferplec-mysql.sql
+/database/ferplec-limpio.sql
 /vendor
 _ide_helper.php
 Homestead.json

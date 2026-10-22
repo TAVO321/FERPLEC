@@ -12,10 +12,12 @@ class SettingController extends Controller
 {
     public function index(): View
     {
+        $settings = Setting::values();
+
         return view('admin.settings.index', [
-            'whatsapp' => Setting::get('whatsapp_number', Setting::get('whatsapp', config('ferplec.whatsapp'))),
-            'site_name' => Setting::get('site_name', config('ferplec.brand')),
-            'site_slogan' => Setting::get('site_slogan', config('ferplec.tagline')),
+            'whatsapp' => $settings['whatsapp'] ?? config('ferplec.whatsapp'),
+            'site_name' => $settings['site_name'] ?? config('ferplec.brand'),
+            'site_slogan' => $settings['site_slogan'] ?? config('ferplec.tagline'),
         ]);
     }
 
@@ -27,14 +29,19 @@ class SettingController extends Controller
             'site_slogan' => ['nullable', 'string', 'max:150'],
         ]);
 
-        Setting::set('whatsapp_number', $data['whatsapp']);
-        Setting::set('whatsapp', $data['whatsapp']);
-        if (isset($data['site_name'])) {
-            Setting::set('site_name', $data['site_name']);
+        $values = [
+            'whatsapp' => $data['whatsapp'],
+        ];
+
+        if (filled($data['site_name'] ?? null)) {
+            $values['site_name'] = $data['site_name'];
         }
-        if (isset($data['site_slogan'])) {
-            Setting::set('site_slogan', $data['site_slogan']);
+
+        if (filled($data['site_slogan'] ?? null)) {
+            $values['site_slogan'] = $data['site_slogan'];
         }
+
+        Setting::setMany($values);
 
         return back()->with('status', 'Configuración guardada correctamente.');
     }

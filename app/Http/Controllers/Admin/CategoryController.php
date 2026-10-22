@@ -26,9 +26,10 @@ class CategoryController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validated($request);
-        $data['slug'] = Str::slug($data['name']);
+        $data['slug'] = $this->uniqueSlug($data['name']);
 
         Category::create($data);
+        Category::flushCache();
 
         return redirect()->route('admin.categories.index')->with('success', 'Categoría creada.');
     }
@@ -40,36 +41,57 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category): RedirectResponse
     {
-        $data = $this->validated($request, $category);
-        $data['slug'] = Str::slug($data['name']);
+        $data = $this->validated($request);
+        $data['slug'] = $this->uniqueSlug($data['name'], $category->id);
 
         $category->update($data);
+        Category::flushCache();
 
         return redirect()->route('admin.categories.index')->with('success', 'Categoría actualizada.');
     }
 
     public function destroy(Category $category): RedirectResponse
     {
-        if ($category->products()->exists()) {
+        if ($category->products()->exists() || $category->subcategoryProducts()->exists()) {
             return back()->with('error', 'No se puede eliminar: tiene productos asignados.');
         }
 
         $category->delete();
+        Category::flushCache();
 
         return redirect()->route('admin.categories.index')->with('success', 'Categoría eliminada.');
     }
 
-    private function validated(Request $request, ?Category $category = null): array
+    private function uniqueSlug(string $name, ?int $ignoreId = null): string
     {
-        return $request->validate([
+        $base = Str::slug($name);
+        $candidate = $base;
+        $suffix = 2;
+
+        while (Category::where('slug', $candidate)->when($ignoreId, fn ($q) => $q->where('id', '<>', $ignoreId))->exists()) {
+            $candidate = $base.'-'.$suffix++;
+        }
+
+        return $candidate;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function validated(Request $request): array
+    {
+        $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'icon' => ['nullable', 'string', 'max:10'],
-            'color' => ['required', 'string', 'max:20'],
+            'color' => ['nullable', 'string', 'max:9'],
             'description' => ['nullable', 'string'],
             'is_active' => ['boolean'],
             'sort_order' => ['integer', 'min:0'],
-        ]) + [
-            'is_active' => $request->boolean('is_active'),
-        ];
+        ]);
+
+        $data['is_active'] = $request->boolean('is_active');
+        $data['sort_order'] = (int) ($data['sort_order'] ?? 0);
+
+        return $data;
     }
 }

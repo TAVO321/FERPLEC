@@ -5,8 +5,9 @@
 @section('content')
 <section class="relative overflow-hidden bg-[#173451] text-white">
     <picture>
-        <source srcset="{{ media_url('banners/catalogo.webp') }}" type="image/webp">
-        <img src="{{ media_url('banners/catalogo.jpg') }}" alt="Catálogo de productos FERPLEC" class="absolute inset-0 w-full h-full object-cover object-[65%_center]">
+        <source type="image/avif" srcset="{{ media_url('banners/catalogo.avif') }}" type="image/avif">
+        <source type="image/webp" srcset="{{ media_url('banners/catalogo.webp') }}" type="image/webp">
+        <img src="{{ media_url('banners/catalogo.jpg') }}" width="1920" height="280" fetchpriority="high" alt="Catálogo de productos FERPLEC" class="absolute inset-0 w-full h-full object-cover object-[65%_center]">
     </picture>
     <div class="absolute inset-0 bg-gradient-to-r from-[#173451] via-[#173451]/92 to-[#173451]/35"></div>
     <div class="relative max-w-7xl mx-auto px-4 py-10 sm:py-12 lg:py-14">
@@ -96,7 +97,7 @@
                     </div>
                     <span class="text-[10px] sm:text-xs {{ $product->in_stock ? 'text-[#22A366]' : 'text-gray-400' }}">{{ $product->in_stock ? 'Disponible' : 'Sin stock' }}</span>
                 </div>
-                <button @click="$store.cart.add({code: '{{ $product->code }}', name: '{{ addslashes($product->name) }}', price: {{ $product->price ?? 0 }}, unit: '{{ $product->unit }}', variant: null, stock: {{ $product->stock }}})" class="w-full rounded-lg bg-[#173451] text-white py-2 text-sm hover:bg-[#132a44] active:scale-[0.98] transition-all">Agregar a mi lista</button>
+                    <button @click="$store.cart.add(@js(['code' => $product->code, 'name' => $product->name, 'price' => (float) ($product->price ?? 0), 'unit' => $product->unit, 'variant' => null, 'stock' => (int) $product->stock]))" class="w-full rounded-lg bg-[#173451] text-white py-2 text-sm hover:bg-[#132a44] active:scale-[0.98] transition-all">Agregar a mi lista</button>
             </div>
         </article>
         @empty

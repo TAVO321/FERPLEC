@@ -34,8 +34,8 @@
                 <span class="{{ $product->in_stock ? 'text-[#22A366]' : 'text-red-500' }}">{{ $product->in_stock ? 'Disponible' : 'No disponible - Consultar' }}</span>
             </div>
             <div class="flex flex-wrap gap-3">
-                <button @click="$store.cart.add({code: '{{ $product->code }}', name: '{{ addslashes($product->name) }}', price: {{ $product->price ?? 0 }}, unit: '{{ $product->unit }}', variant: null, stock: {{ $product->stock }}})" class="rounded-lg bg-[#173451] text-white px-6 py-3 font-semibold hover:bg-[#132a44]">Agregar a mi lista</button>
-                <a href="https://wa.me/{{ config('ferplec.whatsapp', env('WHATSAPP_NUMBER','59163951262')) }}?text={{ rawurlencode('Hola, FERPLEC. Me gustaría consultar por: ' . $product->name . ' (Código: ' . $product->code . ')') }}" target="_blank" class="rounded-lg bg-[#22A366] text-white px-6 py-3 font-semibold hover:bg-[#1c8a58]">Consultar por WhatsApp</a>
+                <button @click="$store.cart.add(@js(['code' => $product->code, 'name' => $product->name, 'price' => (float) ($product->price ?? 0), 'unit' => $product->unit, 'variant' => null, 'stock' => (int) $product->stock]))" class="rounded-lg bg-[#173451] text-white px-6 py-3 font-semibold hover:bg-[#132a44]">Agregar a mi lista</button>
+                <a href="{{ wa_link('Hola, FERPLEC. Me gustaría consultar por: ' . $product->name . ' (Código: ' . $product->code . ')') }}" target="_blank" class="rounded-lg bg-[#22A366] text-white px-6 py-3 font-semibold hover:bg-[#1c8a58]">Consultar por WhatsApp</a>
             </div>
             @if($product->description)
             <div class="rounded-2xl border border-gray-100 p-6 space-y-3">
@@ -67,7 +67,7 @@
             <div class="p-4 space-y-2">
                 <a href="{{ route('product.show', $item) }}" class="font-semibold text-[#173451] hover:text-[#E66A19] line-clamp-2">{{ $item->name }}</a>
                 <div class="font-bold text-[#173451]">{{ $item->price_formatted }}</div>
-                <button @click="$store.cart.add({code: '{{ $item->code }}', name: '{{ addslashes($item->name) }}', price: {{ $item->price ?? 0 }}, unit: '{{ $item->unit }}', variant: null, stock: {{ $item->stock }}})" class="w-full rounded-lg border border-[#173451] text-[#173451] py-2 hover:bg-[#173451] hover:text-white">Agregar a mi lista</button>
+                <button @click="$store.cart.add(@js(['code' => $item->code, 'name' => $item->name, 'price' => (float) ($item->price ?? 0), 'unit' => $item->unit, 'variant' => null, 'stock' => (int) $item->stock]))" class="w-full rounded-lg border border-[#173451] text-[#173451] py-2 hover:bg-[#173451] hover:text-white">Agregar a mi lista</button>
             </div>
         </div>
         @endforeach

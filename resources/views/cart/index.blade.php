@@ -82,7 +82,7 @@ function sendToWhatsapp() {
         msg += ' — ' + item.qty + ' ' + item.unit + '.\n';
     });
     msg += '\n¿Podrían confirmarme disponibilidad, precio total y opciones de entrega?\n\nMuchas gracias.';
-    const url = 'https://wa.me/{{ config('ferplec.whatsapp', env('WHATSAPP_NUMBER','59163951262')) }}?text=' + encodeURIComponent(msg);
+    const url = '{{ wa_link() }}?text=' + encodeURIComponent(msg);
     window.open(url, '_blank');
 }
 </script>

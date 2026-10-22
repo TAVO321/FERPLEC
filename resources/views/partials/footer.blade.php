@@ -19,7 +19,7 @@
             <h3 class="font-semibold mb-3">Atención</h3>
             <ul class="space-y-2 text-sm text-white/80">
                 <li><a href="{{ route('cart') }}" class="hover:text-white">Mi lista de materiales</a></li>
-                <li><a href="https://wa.me/{{ config('ferplec.whatsapp', env('WHATSAPP_NUMBER','59163951262')) }}" target="_blank" class="hover:text-white">Consultar por WhatsApp</a></li>
+                <li><a href="{{ wa_link() }}" target="_blank" class="hover:text-white">Consultar por WhatsApp</a></li>
                 <li><a href="{{ route('contact') }}" class="hover:text-white">Contacto</a></li>
             </ul>
         </div>

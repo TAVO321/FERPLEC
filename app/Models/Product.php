@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,7 +18,7 @@ class Product extends Model
         'code', 'name', 'slug', 'short_description', 'description', 'specifications',
         'applications', 'category_id', 'subcategory_id', 'brand', 'manufacturer',
         'price', 'unit', 'stock', 'min_stock', 'stock_apartado', 'stock_vendido',
-        'is_active', 'is_featured', 'images', 'variants', 'views', 'sort_order',
+        'is_active', 'is_featured', 'images', 'variants', 'sort_order',
     ];
 
     protected $casts = [
@@ -25,6 +27,12 @@ class Product extends Model
         'images' => 'array',
         'variants' => 'array',
         'price' => 'decimal:2',
+        'stock' => 'integer',
+        'stock_apartado' => 'integer',
+        'stock_vendido' => 'integer',
+        'min_stock' => 'integer',
+        'views' => 'integer',
+        'sort_order' => 'integer',
     ];
 
     public function category(): BelongsTo
@@ -42,47 +50,45 @@ class Product extends Model
         return $this->hasMany(StockMovement::class);
     }
 
-    public function getMainImageAttribute(): ?string
+    public function scopeActive(Builder $query): Builder
     {
-        $images = $this->images ?? [];
-
-        return $images[0] ?? null;
+        return $query->where('is_active', true);
     }
 
-    public function getInStockAttribute(): bool
+    public function scopeFeatured(Builder $query): Builder
     {
-        return $this->stock_disponible > 0;
+        return $query->where('is_featured', true);
     }
 
-    public function getStockTotalAttribute(): int
+    protected function mainImage(): Attribute
     {
-        return (int) $this->stock;
+        return Attribute::get(fn () => $this->images[0] ?? null);
     }
 
-    public function getStockDisponibleAttribute(): int
+    protected function inStock(): Attribute
     {
-        return max(0, (int) $this->stock - (int) $this->stock_apartado - (int) $this->stock_vendido);
+        return Attribute::get(fn (): bool => $this->stock_disponible > 0);
     }
 
-    public function getImageAttribute(): ?string
+    protected function stockDisponible(): Attribute
     {
-        return $this->main_image;
+        return Attribute::get(fn (): int => max(
+            0,
+            (int) $this->stock - (int) $this->stock_apartado - (int) $this->stock_vendido
+        ));
     }
 
-    public function getPriceFormattedAttribute(): string
+    protected function priceFormatted(): Attribute
     {
-        if (is_null($this->price)) {
-            return 'Consultar';
-        }
-
-        return 'Bs '.number_format($this->price, 2, '.', ',');
+        return Attribute::get(fn (): string => is_null($this->price)
+            ? 'Consultar'
+            : 'Bs '.number_format((float) $this->price, 2, '.', ','));
     }
 
-    protected static function boot()
+    protected static function booted(): void
     {
-        parent::boot();
-        static::creating(function ($product) {
-            if (empty($product->slug)) {
+        static::creating(function (self $product) {
+            if (blank($product->slug)) {
                 $product->slug = Str::slug($product->name).'-'.Str::lower($product->code);
             }
         });

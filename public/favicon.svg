@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="FERPLEC">
+    <rect width="64" height="64" rx="14" fill="#173451"/>
+    <path d="M20 17h25v7H28v7h13v7H28v9h-8z" fill="#ffffff"/>
+    <rect x="20" y="51" width="25" height="4" rx="2" fill="#E66A19"/>
+</svg>

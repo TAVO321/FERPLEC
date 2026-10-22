@@ -6,8 +6,9 @@
 <section class="relative">
     <div class="relative h-[460px] sm:h-[520px] lg:h-[580px] overflow-hidden">
         <picture>
-            <source srcset="{{ asset('images/hero-ferplec.webp') }}" type="image/webp">
-            <img src="{{ asset('images/hero-ferplec.jpg') }}" alt="FERPLEC - Ferretería, Plomería y Electricidad. Todo para tus proyectos." class="absolute inset-0 w-full h-full object-cover object-[60%_center] lg:object-[55%_center]">
+            <source type="image/avif" srcset="{{ asset('images/hero-640.avif') }} 640w, {{ asset('images/hero-1280.avif') }} 1280w, {{ asset('images/hero-1920.avif') }} 1920w" sizes="100vw">
+            <source type="image/webp" srcset="{{ asset('images/hero-640.webp') }} 640w, {{ asset('images/hero-1280.webp') }} 1280w, {{ asset('images/hero-1920.webp') }} 1920w" sizes="100vw">
+            <img src="{{ asset('images/hero-ferplec.jpg') }}" srcset="{{ asset('images/hero-640.jpg') }} 640w, {{ asset('images/hero-1280.jpg') }} 1280w, {{ asset('images/hero-ferplec.jpg') }} 1920w" sizes="100vw" width="1920" height="700" fetchpriority="high" alt="FERPLEC - Ferretería, Plomería y Electricidad. Todo para tus proyectos." class="absolute inset-0 w-full h-full object-cover object-[60%_center] lg:object-[55%_center]">
         </picture>
         <div class="absolute inset-0 bg-gradient-to-r from-[#173451] via-[#173451]/85 to-transparent"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-[#173451]/40 via-transparent to-transparent lg:hidden"></div>
@@ -93,7 +94,7 @@
                     </div>
                     <span class="text-[10px] sm:text-xs {{ $product->in_stock ? 'text-[#22A366]' : 'text-gray-400' }}">{{ $product->in_stock ? 'Disponible' : 'Sin stock' }}</span>
                 </div>
-                <button @click="$store.cart.add({code: '{{ $product->code }}', name: '{{ addslashes($product->name) }}', price: {{ $product->price ?? 0 }}, unit: '{{ $product->unit }}', variant: null, stock: {{ $product->stock }}})" class="w-full rounded-lg bg-[#173451] text-white py-1.5 sm:py-2 text-xs sm:text-sm hover:bg-[#132a44] transition-colors">Agregar a mi lista</button>
+                <button @click="$store.cart.add(@js(['code' => $product->code, 'name' => $product->name, 'price' => (float) ($product->price ?? 0), 'unit' => $product->unit, 'variant' => null, 'stock' => (int) $product->stock]))" class="w-full rounded-lg bg-[#173451] text-white py-1.5 sm:py-2 text-xs sm:text-sm hover:bg-[#132a44] transition-colors">Agregar a mi lista</button>
             </div>
         </div>
         @empty
